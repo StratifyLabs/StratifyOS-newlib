@@ -1,0 +1,26 @@
+
+set(SOURCES
+	bsd_qsort_r.c
+	bsearch.c
+	db_local.h
+	extern.h
+	hash.c
+	hash.h
+	hash_bigkey.c
+	hash_buf.c
+	hash_func.c
+	hash_log2.c
+	hash_page.c
+	hcreate.3
+	hcreate.c
+	hcreate_r.c
+	page.h
+	qsort.c
+	qsort_r.c
+	tdelete.c
+	tdestroy.c
+	tfind.c
+	tsearch.3
+	tsearch.c
+	twalk.c
+	PARENT_SCOPE)
