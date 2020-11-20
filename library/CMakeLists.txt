@@ -1,7 +1,5 @@
 project(newlib CXX C)
 
-#Add sources to the project
-sos_sdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
 
 set(PUBLIC_DEFINITIONS
 	-D__StratifyOS__
@@ -20,7 +18,8 @@ set(PRIVATE_DEFINITIONS
 	-DHAVE_SYSTEM
 	-DHAVE_FCNTL
 	-DHAVE_RENAME
-#	-D__BUFSIZ__=64
+	-D_COMPILING_NEWLIB=1
+	-D__BUFSIZ__=64
 	-D__IEEE_LITTLE_ENDIAN
 	-D__IEEE_BYTES_LITTLE_ENDIAN
 	)
@@ -28,8 +27,12 @@ set(PRIVATE_DEFINITIONS
 set(BUILD_FLAGS
 	-fno-builtin
 	-fsingle-precision-constant
+	-ffunction-sections
+	-fdata-sections
 	)
 
+#Add sources to the project
+sos_sdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
 sos_sdk_add_subdirectory(LIBM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libm)
 
 set(LIBC_NAME c)
@@ -83,24 +86,26 @@ target_include_directories(${LIBC_RELEASE_TARGET}
 	PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include>
 	PRIVATE
-	${SOS_INCLUDE_DIRECTORIES}
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/machine/arm
 	)
 
 target_include_directories(${LIBM_RELEASE_TARGET}
 	PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include>
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libm/common>
 	PRIVATE
-	${SOS_INCLUDE_DIRECTORIES}
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/machine/arm
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libm/math
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libm/common
+
 	)
 
 target_compile_options(${LIBC_RELEASE_TARGET}
-	PUBLIC
+	PRIVATE
 	-Os
 	)
 
 target_compile_options(${LIBM_RELEASE_TARGET}
-	PUBLIC
+	PRIVATE
 	-Os
 	)
 

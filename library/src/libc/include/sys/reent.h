@@ -14,6 +14,9 @@ extern "C" {
 #include <stddef.h>
 #include <sys/_types.h>
 
+extern void * malloc(size_t);
+extern _PTR memset(_PTR, int, size_t);
+
 #define _NULL 0
 
 #ifndef __Long
@@ -418,7 +421,7 @@ struct _reent
   __FILE *__sf;			        /* file descriptors */
   struct _misc_reent *_misc;            /* strtok, multibyte states */
   char *_signal_buf;                    /* strsignal */
-#ifdef __StratifyOS__
+#if defined __StratifyOS__
   proc_mem_t * procmem_base;
 	__sigset_t sigmask;
 	__sigset_t sigpending;
@@ -461,34 +464,8 @@ extern const struct __sFILE_fake __sf_fake_stderr;
   }
   
 #else
-
-# define _REENT_INIT(var) \
-  { 0, \
-    (__FILE *)&__sf_fake_stdin, \
-    (__FILE *)&__sf_fake_stdout, \
-    (__FILE *)&__sf_fake_stderr, \
-    0, \
-    _NULL, \
-    0, \
-    0, \
-    "C", \
-    _NULL, \
-    _NULL, \
-    0, \
-    0, \
-    _NULL, \
-    _NULL, \
-    _NULL, \
-    _NULL, \
-    _NULL, \
-    _REENT_INIT_ATEXIT \
-    {_NULL, 0, _NULL}, \
-    _NULL, \
-    _NULL, \
-    _NULL \
-  }
   
- #endif
+#endif
 
 #define _REENT_INIT_PTR_ZEROED(var) \
   { (var)->_stdin = (__FILE *)&__sf_fake_stdin; \

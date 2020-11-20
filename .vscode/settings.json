@@ -1,3 +1,10 @@
 {
-  "C_Cpp.default.configurationProvider": "go2sh.cmake-integration"
+  "C_Cpp.default.configurationProvider": "go2sh.cmake-integration",
+  "cmake.environment": {
+    "SOS_SDK_PATH": "/Users/tgil/StratifyLabs/SDK/GCC8/StratifyLabs-SDK"
+  },
+  "cmake.buildDirectory": "${workspaceFolder}/cmake_arm",
+  "cmake.configureArgs": [
+    "-DSOS_ARCH_LIST=''"
+  ]
 }

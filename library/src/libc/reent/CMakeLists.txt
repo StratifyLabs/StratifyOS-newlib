@@ -1,7 +1,5 @@
 
 set(SOURCES
-
-
 	closer.c
 	execr.c
 	fcntlr.c
@@ -12,7 +10,7 @@ set(SOURCES
 	impure.c
 	isattyr.c
 	linkr.c
-	lseek64r.c
+	#lseek64r.c
 	lseekr.c
 	mkdirr.c
 	open64r.c
@@ -24,10 +22,9 @@ set(SOURCES
 	sbrkr.c
 	signalr.c
 	signgam.c
-	stat64r.c
+	#stat64r.c
 	statr.c
 	timesr.c
 	unlinkr.c
 	writer.c
-
 	PARENT_SCOPE)

@@ -138,9 +138,9 @@
 #endif /* _POSIX2_RE_DUP_MAX  */
 
 #ifndef ARG_MAX
-#define ARG_MAX		4096
+//#define ARG_MAX 4096
 #endif
 
 #ifndef PATH_MAX
-#define PATH_MAX	4096
+//#define PATH_MAX 4096
 #endif
