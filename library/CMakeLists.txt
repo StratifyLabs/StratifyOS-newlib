@@ -35,14 +35,20 @@ set(BUILD_FLAGS
 sos_sdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
 sos_sdk_add_subdirectory(LIBM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libm)
 
-set(LIBC_NAME c)
-set(LIBM_NAME m)
+set(LIBC_NAME newlib_libc)
+set(LIBM_NAME newlib_libm)
+set(LIBA_NAME newlib_liba)
 
 sos_sdk_library_target(LIBC_RELEASE ${LIBC_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
 sos_sdk_library_target(LIBM_RELEASE ${LIBM_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA ${LIBA_NAME} "STRING_ONLY" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_INTEGER ${LIBA_NAME} "INTEGER_ONLY" release ${SOS_ARCH})
 
 add_library(${LIBC_RELEASE_TARGET} STATIC)
 add_library(${LIBM_RELEASE_TARGET} STATIC)
+
+add_library(${LIBA_TARGET} OBJECT)
+add_library(${LIBA_INTEGER_TARGET} OBJECT)
 
 target_sources(${LIBC_RELEASE_TARGET}
 	PUBLIC
@@ -54,6 +60,40 @@ target_sources(${LIBM_RELEASE_TARGET}
 	PUBLIC
 	PRIVATE
 	${LIBM_SOURCES}
+	)
+
+set(LIBA_SOURCES
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfprintf.c
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfscanf.c
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfwscanf.c
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfwprintf.c
+)
+
+target_sources(${LIBA_TARGET}
+	PRIVATE
+	${LIBA_SOURCES}
+)
+
+target_sources(${LIBA_INTEGER_TARGET}
+	PRIVATE
+	${LIBA_SOURCES}
+)
+
+target_compile_definitions(${LIBA_TARGET}
+	PUBLIC
+	${PUBLIC_DEFINITIONS}
+	PRIVATE
+	${PRIVATE_DEFINITIONS}
+	-DSTRING_ONLY
+	)
+
+target_compile_definitions(${LIBA_INTEGER_TARGET}
+	PUBLIC
+	${PUBLIC_DEFINITIONS}
+	PRIVATE
+	${PRIVATE_DEFINITIONS}
+	-DSTRING_ONLY
+	-DINTEGER_ONLY
 	)
 
 target_compile_definitions(${LIBC_RELEASE_TARGET}
@@ -113,19 +153,52 @@ sos_sdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${SOS_ARCH}
 sos_sdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
 add_library(${LIBC_DEBUG_TARGET} STATIC)
 add_library(${LIBM_DEBUG_TARGET} STATIC)
+
 sos_sdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
 sos_sdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
+
+sos_sdk_library_add_arch_targets("${LIBA_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_INTEGER_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 
-add_custom_target(
-	libc_format
-	COMMAND /usr/local/bin/clang-format
-	-i
-	--verbose
-	${FORMAT_LIST}
+target_sources(${LIBC_RELEASE_TARGET}
+	PUBLIC
+	PRIVATE
+	${LIBC_SOURCES}
+	$<TARGET_OBJECTS:${LIBA_TARGET}>
+	$<TARGET_OBJECTS:${LIBA_INTEGER_TARGET}>
 	)
+
+foreach(ARCH ${SOS_ARCH_LIST})
+	target_sources(${LIBC_NAME}_release_${ARCH}
+		PUBLIC
+		PRIVATE
+		${LIBC_SOURCES}
+		$<TARGET_OBJECTS:${LIBA_NAME}_STRING_ONLY_release_${ARCH}>
+		$<TARGET_OBJECTS:${LIBA_NAME}_INTEGER_ONLY_release_${ARCH}>
+		)
+
+	target_sources(${LIBC_NAME}_debug_${ARCH}
+		PUBLIC
+		PRIVATE
+		${LIBC_SOURCES}
+		$<TARGET_OBJECTS:${LIBA_NAME}_STRING_ONLY_release_${ARCH}>
+		$<TARGET_OBJECTS:${LIBA_NAME}_INTEGER_ONLY_release_${ARCH}>
+		)
+endforeach()
+
+install(DIRECTORY
+	src/libc/include/
+	DESTINATION include
+	PATTERN CMakelists.txt EXCLUDE)
+
+
+install(FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/newlib.cmake
+	DESTINATION
+	cmake/targets)
 
 

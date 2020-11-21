@@ -14,6 +14,7 @@ sos_sdk_add_subdirectory(SIGNAL_SOURCES signal)
 sos_sdk_add_subdirectory(STDIO_SOURCES stdio)
 sos_sdk_add_subdirectory(STDLIB_SOURCES stdlib)
 sos_sdk_add_subdirectory(STRING_SOURCES string)
+sos_sdk_add_subdirectory(SYS_SOURCES sys)
 sos_sdk_add_subdirectory(SYSCALLS_SOURCES syscalls)
 sos_sdk_add_subdirectory(TIME_SOURCES time)
 sos_sdk_add_subdirectory(UNIX_SOURCES unix)
@@ -32,6 +33,7 @@ set(SOURCES
 	${REENT_SOURCES}
 	${SEARCH_SOURCES}
 	${SIGNAL_SOURCES}
+	${SYS_SOURCES}
 	${STDIO_SOURCES}
 	${STDLIB_SOURCES}
 	${STRING_SOURCES}
