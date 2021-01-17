@@ -25,77 +25,35 @@ int	_EXFUN(access,(const char *__path, int __amode ));
 unsigned  _EXFUN(alarm, (unsigned __secs ));
 int     _EXFUN(chdir, (const char *__path ));
 int     _EXFUN(chmod, (const char *__path, mode_t __mode ));
-#if !defined(__INSIDE_CYGWIN__)
 int     _EXFUN(chown, (const char *__path, uid_t __owner, gid_t __group ));
-#endif
-#if defined(__CYGWIN__) || defined(__rtems__)
-int     _EXFUN(chroot, (const char *__path ));
-#endif
 int     _EXFUN(close, (int __fildes ));
-#if defined(__CYGWIN__)
-size_t	_EXFUN(confstr, (int __name, char *__buf, size_t __len));
-#endif
 char *  _EXFUN(ctermid, (char *__s ));
 char *  _EXFUN(cuserid, (char *__s ));
-#if defined(__CYGWIN__)
-int	_EXFUN(daemon, (int nochdir, int noclose));
-#endif
 int     _EXFUN(dup, (int __fildes ));
 int     _EXFUN(dup2, (int __fildes, int __fildes2 ));
-#if defined(__CYGWIN__)
-int     _EXFUN(dup3, (int __fildes, int __fildes2, int flags));
-int	_EXFUN(eaccess, (const char *__path, int __mode));
-void	_EXFUN(endusershell, (void));
-int	_EXFUN(euidaccess, (const char *__path, int __mode));
-#endif
 int     _EXFUN(execl, (const char *__path, const char *, ... ));
 int     _EXFUN(execle, (const char *__path, const char *, ... ));
 int     _EXFUN(execlp, (const char *__file, const char *, ... ));
-#if defined(__CYGWIN__)
-int     _EXFUN(execlpe, (const char *__file, const char *, ... ));
-#endif
 int     _EXFUN(execv, (const char *__path, char * const __argv[] ));
 int     _EXFUN(execve, (const char *__path, char * const __argv[], char * const __envp[] ));
 int     _EXFUN(execvp, (const char *__file, char * const __argv[] ));
-#if defined(__CYGWIN__)
-int     _EXFUN(execvpe, (const char *__file, char * const __argv[], char * const __envp[] ));
-#endif
 #if __POSIX_VISIBLE >= 200809 || __BSD_VISIBLE || defined(__CYGWIN__)
 int	_EXFUN(faccessat, (int __dirfd, const char *__path, int __mode, int __flags));
 #endif
-#if defined(__CYGWIN__) || defined(__rtems__) || defined(__SPU__)
-int     _EXFUN(fchdir, (int __fildes));
-#endif
 int     _EXFUN(fchmod, (int __fildes, mode_t __mode ));
-#if !defined(__INSIDE_CYGWIN__)
 int     _EXFUN(fchown, (int __fildes, uid_t __owner, gid_t __group ));
-#endif
 #if __POSIX_VISIBLE >= 200809 || __BSD_VISIBLE || defined(__CYGWIN__)
 int	_EXFUN(fchownat, (int __dirfd, const char *__path, uid_t __owner, gid_t __group, int __flags));
-#endif
-#if defined(__CYGWIN__)
-int	_EXFUN(fexecve, (int __fd, char * const __argv[], char * const __envp[] ));
 #endif
 pid_t   _EXFUN(fork, (void ));
 long    _EXFUN(fpathconf, (int __fd, int __name ));
 int     _EXFUN(fsync, (int __fd));
 int     _EXFUN(fdatasync, (int __fd));
-#if defined(__CYGWIN__)
-char *  _EXFUN(get_current_dir_name, (void));
-#endif
 char *  _EXFUN(getcwd, (char *__buf, size_t __size ));
-#if defined(__CYGWIN__)
-int	_EXFUN(getdomainname ,(char *__name, size_t __len));
-#endif
-#if !defined(__INSIDE_CYGWIN__)
 gid_t   _EXFUN(getegid, (void ));
 uid_t   _EXFUN(geteuid, (void ));
 gid_t   _EXFUN(getgid, (void ));
-#endif
 int     _EXFUN(getgroups, (int __gidsetsize, gid_t __grouplist[] ));
-#if defined(__CYGWIN__)
-long    _EXFUN(gethostid, (void));
-#endif
 char *  _EXFUN(getlogin, (void ));
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 int _EXFUN(getlogin_r, (char *name, size_t namesize) );
