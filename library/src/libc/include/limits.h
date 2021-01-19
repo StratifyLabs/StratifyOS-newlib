@@ -136,11 +136,3 @@
  *    permitted when using the interval notation `\{M,N\}'.  */
 #define _POSIX2_RE_DUP_MAX              255
 #endif /* _POSIX2_RE_DUP_MAX  */
-
-#ifndef ARG_MAX
-//#define ARG_MAX 4096
-#endif
-
-#ifndef PATH_MAX
-//#define PATH_MAX 4096
-#endif

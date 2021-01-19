@@ -37,9 +37,21 @@
 #ifndef _SYS_SYSLIMITS_H_
 #define _SYS_SYSLIMITS_H_
 
+#define PATH_MAX_LARGE 255
+#define PATH_MAX_MEDIUM 127
+#define PATH_MAX_SMALL 63
+
+#define ARG_MAX_LARGE 511
+#define ARG_MAX_MEDIUM 255
+#define ARG_MAX_SMALL 127
+
+#define NAME_MAX_LARGE 127
+#define NAME_MAX_MEDIUM 63
+#define NAME_MAX_SMALL 31
+
 #if defined __v7em_f5sh || defined __v7em_f5dh
-#define NAME_MAX 24
-#define PATH_MAX 64
+#define NAME_MAX NAME_MAX_LARGE
+#define PATH_MAX PATH_MAX_LARGE
 #define OPEN_MAX 32
 #define ARG_MAX 128
 #define LINE_MAX 2048
