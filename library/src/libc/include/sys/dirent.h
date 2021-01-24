@@ -33,7 +33,6 @@
 extern "C" {
 #endif
 
-
 #if !defined __link
 
 /*! \brief Directory Entry
@@ -41,25 +40,24 @@ extern "C" {
  *
  */
 struct dirent {
-	ino_t d_ino /*! \brief File Serial number */;
-	char d_name[NAME_MAX+1] /*! \brief Name of entry */;
+  ino_t d_ino /*! \brief File Serial number */;
+  char d_name[NAME_MAX + 1] /*! \brief Name of entry */;
 };
 
-
 typedef struct {
-	const void * fs;
-	void * handle;
-	long loc;
-	 unsigned int checksum;
+  const void *fs;
+  void *handle;
+  long loc;
+  unsigned int checksum;
 } DIR;
 
-int closedir(DIR * dirp);
-DIR * opendir(const char * dirname);
-struct dirent *readdir(DIR * dirp);
-int readdir_r(DIR * dirp, struct dirent * entry, struct dirent ** result);
-void rewinddir(DIR * dirp);
-void seekdir(DIR * dirp, long loc);
-long telldir(DIR * dirp);
+int closedir(DIR *dirp);
+DIR *opendir(const char *dirname);
+struct dirent *readdir(DIR *dirp);
+int readdir_r(DIR *dirp, struct dirent *entry, struct dirent **result);
+void rewinddir(DIR *dirp);
+void seekdir(DIR *dirp, long loc);
+long telldir(DIR *dirp);
 
 #endif
 
