@@ -199,6 +199,6 @@ install(DIRECTORY
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/newlib.cmake
 	DESTINATION
-	cmake/targets)
+	${SOS_SDK_PATH}/cmake/targets)
 
 
