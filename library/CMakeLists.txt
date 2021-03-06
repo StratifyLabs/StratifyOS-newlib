@@ -41,14 +41,15 @@ set(LIBA_NAME newlib_liba)
 
 sos_sdk_library_target(LIBC_RELEASE ${LIBC_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
 sos_sdk_library_target(LIBM_RELEASE ${LIBM_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA ${LIBA_NAME} "STRING_ONLY" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA_INTEGER ${LIBA_NAME} "INTEGER_ONLY" release ${SOS_ARCH})
+
+sos_sdk_library_target(LIBA_RELEASE ${LIBA_NAME} "STRING_ONLY" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_INTEGER_RELEASE ${LIBA_NAME} "INTEGER_ONLY" release ${SOS_ARCH})
 
 add_library(${LIBC_RELEASE_TARGET} STATIC)
 add_library(${LIBM_RELEASE_TARGET} STATIC)
 
-add_library(${LIBA_TARGET} OBJECT)
-add_library(${LIBA_INTEGER_TARGET} OBJECT)
+add_library(${LIBA_RELEASE_TARGET} STATIC)
+add_library(${LIBA_INTEGER_RELEASE_TARGET} STATIC)
 
 target_sources(${LIBC_RELEASE_TARGET}
 	PUBLIC
@@ -69,17 +70,17 @@ set(LIBA_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfwprintf.c
 )
 
-target_sources(${LIBA_TARGET}
+target_sources(${LIBA_RELEASE_TARGET}
 	PRIVATE
 	${LIBA_SOURCES}
 )
 
-target_sources(${LIBA_INTEGER_TARGET}
+target_sources(${LIBA_INTEGER_RELEASE_TARGET}
 	PRIVATE
 	${LIBA_SOURCES}
 )
 
-target_compile_definitions(${LIBA_TARGET}
+target_compile_definitions(${LIBA_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
@@ -87,7 +88,7 @@ target_compile_definitions(${LIBA_TARGET}
 	-DSTRING_ONLY
 	)
 
-target_compile_definitions(${LIBA_INTEGER_TARGET}
+target_compile_definitions(${LIBA_INTEGER_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
@@ -149,46 +150,32 @@ target_compile_options(${LIBM_RELEASE_TARGET}
 	-Os
 	)
 
+sos_sdk_library_target(LIBA_DEBUG ${LIBA_NAME} "STRING_ONLY" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_INTEGER_DEBUG ${LIBA_NAME} "INTEGER_ONLY" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
+add_library(${LIBA_DEBUG_TARGET} STATIC)
+add_library(${LIBA_INTEGER_DEBUG_TARGET} STATIC)
 add_library(${LIBC_DEBUG_TARGET} STATIC)
 add_library(${LIBM_DEBUG_TARGET} STATIC)
+
+sos_sdk_copy_target(${LIBA_RELEASE_TARGET} ${LIBA_DEBUG_TARGET})
+sos_sdk_copy_target(${LIBA_INTEGER_RELEASE_TARGET} ${LIBA_INTEGER_DEBUG_TARGET})
 
 sos_sdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
 sos_sdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
 
-sos_sdk_library_add_arch_targets("${LIBA_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_INTEGER_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_INTEGER_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_INTEGER_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+
+set(DEPENDENCIES ${LIBA_NAME}_STRING_ONLY ${LIBA_NAME}_INTEGER_ONLY)
+
+sos_sdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
+sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
 sos_sdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-
-target_sources(${LIBC_RELEASE_TARGET}
-	PUBLIC
-	PRIVATE
-	${LIBC_SOURCES}
-	$<TARGET_OBJECTS:${LIBA_TARGET}>
-	$<TARGET_OBJECTS:${LIBA_INTEGER_TARGET}>
-	)
-
-foreach(ARCH ${SOS_ARCH_LIST})
-	target_sources(${LIBC_NAME}_release_${ARCH}
-		PUBLIC
-		PRIVATE
-		${LIBC_SOURCES}
-		$<TARGET_OBJECTS:${LIBA_NAME}_STRING_ONLY_release_${ARCH}>
-		$<TARGET_OBJECTS:${LIBA_NAME}_INTEGER_ONLY_release_${ARCH}>
-		)
-
-	target_sources(${LIBC_NAME}_debug_${ARCH}
-		PUBLIC
-		PRIVATE
-		${LIBC_SOURCES}
-		$<TARGET_OBJECTS:${LIBA_NAME}_STRING_ONLY_release_${ARCH}>
-		$<TARGET_OBJECTS:${LIBA_NAME}_INTEGER_ONLY_release_${ARCH}>
-		)
-endforeach()
 
 install(DIRECTORY
 	src/libc/include/
