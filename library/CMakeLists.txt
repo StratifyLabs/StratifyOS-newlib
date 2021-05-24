@@ -47,14 +47,13 @@ sos_sdk_library_target(LIBA_VPRINTF_RELEASE ${LIBA_NAME} "vprintf" release ${SOS
 sos_sdk_library_target(LIBA_VSIPRINTF_RELEASE ${LIBA_NAME} "vsiprintf" release ${SOS_ARCH})
 sos_sdk_library_target(LIBA_VIPRINTF_RELEASE ${LIBA_NAME} "viprintf" release ${SOS_ARCH})
 
-add_library(${LIBC_RELEASE_TARGET} STATIC)
-add_library(${LIBM_RELEASE_TARGET} STATIC)
-
 add_library(${LIBA_VSPRINTF_RELEASE_TARGET} STATIC)
 add_library(${LIBA_VPRINTF_RELEASE_TARGET} STATIC)
 add_library(${LIBA_VSIPRINTF_RELEASE_TARGET} STATIC)
 add_library(${LIBA_VIPRINTF_RELEASE_TARGET} STATIC)
 
+add_library(${LIBC_RELEASE_TARGET} STATIC)
+add_library(${LIBM_RELEASE_TARGET} STATIC)
 
 target_sources(${LIBC_RELEASE_TARGET}
 	PUBLIC
@@ -184,6 +183,7 @@ sos_sdk_library_target(LIBA_VSPRINTF_DEBUG ${LIBA_NAME} "vsprintf" debug ${SOS_A
 sos_sdk_library_target(LIBA_VPRINTF_DEBUG ${LIBA_NAME} "vprintf" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBA_VSIPRINTF_DEBUG ${LIBA_NAME} "vsiprintf" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBA_VIPRINTF_DEBUG ${LIBA_NAME} "viprintf" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_DEBUG ${LIBA_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
 
 sos_sdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
@@ -208,6 +208,12 @@ sos_sdk_library_add_arch_targets("${LIBA_VSPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} 
 sos_sdk_library_add_arch_targets("${LIBA_VPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBA_VSIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 sos_sdk_library_add_arch_targets("${LIBA_VIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+
+set(DEPENDENCIES
+	${LIBA_NAME}_vsprintf
+	${LIBA_NAME}_vprintf
+	${LIBA_NAME}_vsiprintf
+	${LIBA_NAME}_viprintf)
 
 sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
 sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
