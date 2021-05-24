@@ -82,14 +82,6 @@ iscanf.c
 local.h
 makebuf.c
 mktemp.c
-nano-vfprintf.c
-nano-vfprintf_float.c
-nano-vfprintf_i.c
-nano-vfprintf_local.h
-nano-vfscanf.c
-nano-vfscanf_float.c
-nano-vfscanf_i.c
-nano-vfscanf_local.h
 open_memstream.c
 perror.c
 printf.c

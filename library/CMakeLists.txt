@@ -42,14 +42,19 @@ set(LIBA_NAME newlib_liba)
 sos_sdk_library_target(LIBC_RELEASE ${LIBC_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
 sos_sdk_library_target(LIBM_RELEASE ${LIBM_NAME} "${LIB_OPTION}" release ${SOS_ARCH})
 
-sos_sdk_library_target(LIBA_RELEASE ${LIBA_NAME} "STRING_ONLY" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA_INTEGER_RELEASE ${LIBA_NAME} "INTEGER_ONLY" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VSPRINTF_RELEASE ${LIBA_NAME} "vsprintf" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VPRINTF_RELEASE ${LIBA_NAME} "vprintf" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VSIPRINTF_RELEASE ${LIBA_NAME} "vsiprintf" release ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VIPRINTF_RELEASE ${LIBA_NAME} "viprintf" release ${SOS_ARCH})
 
 add_library(${LIBC_RELEASE_TARGET} STATIC)
 add_library(${LIBM_RELEASE_TARGET} STATIC)
 
-add_library(${LIBA_RELEASE_TARGET} STATIC)
-add_library(${LIBA_INTEGER_RELEASE_TARGET} STATIC)
+add_library(${LIBA_VSPRINTF_RELEASE_TARGET} STATIC)
+add_library(${LIBA_VPRINTF_RELEASE_TARGET} STATIC)
+add_library(${LIBA_VSIPRINTF_RELEASE_TARGET} STATIC)
+add_library(${LIBA_VIPRINTF_RELEASE_TARGET} STATIC)
+
 
 target_sources(${LIBC_RELEASE_TARGET}
 	PUBLIC
@@ -70,17 +75,27 @@ set(LIBA_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfwprintf.c
 )
 
-target_sources(${LIBA_RELEASE_TARGET}
+target_sources(${LIBA_VSPRINTF_RELEASE_TARGET}
 	PRIVATE
 	${LIBA_SOURCES}
 )
 
-target_sources(${LIBA_INTEGER_RELEASE_TARGET}
+target_sources(${LIBA_VPRINTF_RELEASE_TARGET}
 	PRIVATE
 	${LIBA_SOURCES}
 )
 
-target_compile_definitions(${LIBA_RELEASE_TARGET}
+target_sources(${LIBA_VSIPRINTF_RELEASE_TARGET}
+	PRIVATE
+	${LIBA_SOURCES}
+)
+
+target_sources(${LIBA_VIPRINTF_RELEASE_TARGET}
+	PRIVATE
+	${LIBA_SOURCES}
+)
+
+target_compile_definitions(${LIBA_VSPRINTF_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
@@ -88,12 +103,27 @@ target_compile_definitions(${LIBA_RELEASE_TARGET}
 	-DSTRING_ONLY
 	)
 
-target_compile_definitions(${LIBA_INTEGER_RELEASE_TARGET}
+target_compile_definitions(${LIBA_VPRINTF_RELEASE_TARGET}
+	PUBLIC
+	${PUBLIC_DEFINITIONS}
+	PRIVATE
+	${PRIVATE_DEFINITIONS}
+	)
+
+target_compile_definitions(${LIBA_VSIPRINTF_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
 	${PRIVATE_DEFINITIONS}
 	-DSTRING_ONLY
+	-DINTEGER_ONLY
+	)
+
+target_compile_definitions(${LIBA_VIPRINTF_RELEASE_TARGET}
+	PUBLIC
+	${PUBLIC_DEFINITIONS}
+	PRIVATE
+	${PRIVATE_DEFINITIONS}
 	-DINTEGER_ONLY
 	)
 
@@ -150,32 +180,45 @@ target_compile_options(${LIBM_RELEASE_TARGET}
 	-Os
 	)
 
-sos_sdk_library_target(LIBA_DEBUG ${LIBA_NAME} "STRING_ONLY" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBA_INTEGER_DEBUG ${LIBA_NAME} "INTEGER_ONLY" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VSPRINTF_DEBUG ${LIBA_NAME} "vsprintf" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VPRINTF_DEBUG ${LIBA_NAME} "vprintf" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VSIPRINTF_DEBUG ${LIBA_NAME} "vsiprintf" debug ${SOS_ARCH})
+sos_sdk_library_target(LIBA_VIPRINTF_DEBUG ${LIBA_NAME} "viprintf" debug ${SOS_ARCH})
+
 sos_sdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
 sos_sdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
-add_library(${LIBA_DEBUG_TARGET} STATIC)
-add_library(${LIBA_INTEGER_DEBUG_TARGET} STATIC)
+
+add_library(${LIBA_VSPRINTF_DEBUG_TARGET} STATIC)
+add_library(${LIBA_VPRINTF_DEBUG_TARGET} STATIC)
+add_library(${LIBA_VSIPRINTF_DEBUG_TARGET} STATIC)
+add_library(${LIBA_VIPRINTF_DEBUG_TARGET} STATIC)
+
 add_library(${LIBC_DEBUG_TARGET} STATIC)
 add_library(${LIBM_DEBUG_TARGET} STATIC)
 
-sos_sdk_copy_target(${LIBA_RELEASE_TARGET} ${LIBA_DEBUG_TARGET})
-sos_sdk_copy_target(${LIBA_INTEGER_RELEASE_TARGET} ${LIBA_INTEGER_DEBUG_TARGET})
+sos_sdk_copy_target(${LIBA_VSPRINTF_RELEASE_TARGET} ${LIBA_VSPRINTF_DEBUG_TARGET})
+sos_sdk_copy_target(${LIBA_VPRINTF_RELEASE_TARGET} ${LIBA_VPRINTF_DEBUG_TARGET})
+sos_sdk_copy_target(${LIBA_VSIPRINTF_RELEASE_TARGET} ${LIBA_VSIPRINTF_DEBUG_TARGET})
+sos_sdk_copy_target(${LIBA_VIPRINTF_RELEASE_TARGET} ${LIBA_VIPRINTF_DEBUG_TARGET})
 
 sos_sdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
 sos_sdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
 
-sos_sdk_library_add_arch_targets("${LIBA_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_INTEGER_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_DEBUG_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_INTEGER_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VSPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VSIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 
-set(DEPENDENCIES ${LIBA_NAME}_STRING_ONLY ${LIBA_NAME}_INTEGER_ONLY)
+sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
+sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+
+sos_sdk_library_add_arch_targets("${LIBA_VSPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VSIPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+sos_sdk_library_add_arch_targets("${LIBA_VIPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "")
 
 sos_sdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
 sos_sdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
 
 install(DIRECTORY
 	src/libc/include/

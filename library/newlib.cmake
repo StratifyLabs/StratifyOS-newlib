@@ -1,8 +1,10 @@
 
 if(NOT DEFINED IS_SDK)
 	set(COMPILER_RT_CONFIG_LIST release debug)
-	sos_sdk_include_target(newlib_liba_STRING_ONLY "${COMPILER_RT_CONFIG_LIST}")
-	sos_sdk_include_target(newlib_liba_INTEGER_ONLY "${COMPILER_RT_CONFIG_LIST}")
+	sos_sdk_include_target(newlib_liba_VSPRINTF "${COMPILER_RT_CONFIG_LIST}")
+	sos_sdk_include_target(newlib_liba_VPRINTF "${COMPILER_RT_CONFIG_LIST}")
+	sos_sdk_include_target(newlib_liba_VSIPRINTF "${COMPILER_RT_CONFIG_LIST}")
+	sos_sdk_include_target(newlib_liba_VIPRINTF "${COMPILER_RT_CONFIG_LIST}")
 	sos_sdk_include_target(newlib_libc "${COMPILER_RT_CONFIG_LIST}")
 	sos_sdk_include_target(newlib_libm "${COMPILER_RT_CONFIG_LIST}")
 endif()
