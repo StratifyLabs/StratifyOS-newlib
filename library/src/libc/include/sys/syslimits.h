@@ -49,23 +49,27 @@
 #define NAME_MAX_MEDIUM 63
 #define NAME_MAX_SMALL 31
 
+#define OPEN_MAX_LARGE 64
+#define OPEN_MAX_MEDIUM 32
+#define OPEN_MAX_SMALL 32
+
 #if defined __v7em_f5sh || defined __v7em_f5dh
 #define NAME_MAX NAME_MAX_LARGE
 #define PATH_MAX PATH_MAX_LARGE
-#define OPEN_MAX 32
-#define ARG_MAX 128
+#define OPEN_MAX OPEN_MAX_LARGE
+#define ARG_MAX ARG_MAX_LARGE
 #define LINE_MAX 2048
 #elif defined __v7em_f4sh || defined __v7em
-#define NAME_MAX 24
-#define PATH_MAX 64
-#define OPEN_MAX 32
-#define ARG_MAX 128
+#define NAME_MAX NAME_MAX_MEDIUM
+#define PATH_MAX PATH_MAX_MEDIUM
+#define OPEN_MAX OPEN_MAX_SMALL
+#define ARG_MAX ARG_MAX_MEDIUM
 #define LINE_MAX 2048
 #else
-#define NAME_MAX 24
-#define PATH_MAX 64
-#define OPEN_MAX 32
-#define ARG_MAX 128
+#define NAME_MAX NAME_MAX_SMALL
+#define PATH_MAX PATH_MAX_SMALL
+#define OPEN_MAX OPEN_MAX_SMALL
+#define ARG_MAX ARG_MAX_SMALL
 #define LINE_MAX 2048
 #endif
 
