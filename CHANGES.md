@@ -2,6 +2,7 @@
 
 ## Bug Fixes
 
+- Fix some compiler warnings for Woverflow and missing declarations
 - fix `syslimits` values for different architectures
 
 # Version 1.0.0
