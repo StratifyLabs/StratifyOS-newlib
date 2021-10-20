@@ -65,6 +65,11 @@ Supporting OS subroutines required: <<_exit>>, <<_execve>>, <<_fork_r>>,
 static int _EXFUN(do_system, (struct _reent *ptr _AND _CONST char *s));
 #endif
 
+#if defined (__StratifyOS__)
+//this gets rid of a warning
+extern int _system(const char*);
+#endif
+
 int
 _DEFUN(_system_r, (ptr, s),
      struct _reent *ptr _AND

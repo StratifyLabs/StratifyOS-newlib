@@ -49,6 +49,9 @@ DESCRIPTION
 	<<errno>>.
 */
 
+//get rid of the warning
+int _kill(int,int);
+
 int
 _DEFUN (_kill_r, (ptr, pid, sig),
      struct _reent *ptr _AND
