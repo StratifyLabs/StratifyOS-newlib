@@ -20,7 +20,8 @@ set(PRIVATE_DEFINITIONS
 	-DHAVE_RENAME
 	-D_COMPILING_NEWLIB=1
 	-D__BUFSIZ__=64
-	-D_DOUBLE_IS_32BITS=1
+# this causes problems when printing floats
+#	-D_DOUBLE_IS_32BITS=1
 	-D__IEEE_LITTLE_ENDIAN
 	-D__IEEE_BYTES_LITTLE_ENDIAN
 	)
@@ -30,6 +31,7 @@ set(BUILD_FLAGS
 	-fsingle-precision-constant
 	-ffunction-sections
 	-fdata-sections
+	-Wno-overflow
 	)
 
 #Add sources to the project
