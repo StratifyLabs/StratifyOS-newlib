@@ -10,7 +10,6 @@ set(SOURCES
 	a64l.c
 	abort.c
 	abs.c
-	aligned_alloc.c
 	assert.c
 	atexit.c
 	atexit.h
