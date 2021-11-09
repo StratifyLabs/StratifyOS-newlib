@@ -6,6 +6,7 @@
 
 ## Bug Fixes
 
+- Sync the `include` folder to the SDK `include` folder
 - Fix some compiler warnings for Woverflow and missing declarations
 - fix `syslimits` values for different architectures
 

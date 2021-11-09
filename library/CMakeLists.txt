@@ -1,6 +1,9 @@
 project(newlib CXX C)
 
 
+# The include files need to be synced with the ones in the system include folder
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include DESTINATION ${SOS_SDK_PATH}/arm-none-eabi)
+
 set(PUBLIC_DEFINITIONS
 	-D__StratifyOS__
 	)
