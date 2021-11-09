@@ -2,6 +2,8 @@
 
 ## New Features
 
+- Update `FD_SETSIZE` to accommodate `OPEN_MAX`
+- Update `OPEN_MAX`, `PATH_MAX` and `NAME_MAX` to vary in size for each architecture
 - Update `CMakeLists.txt` to require setup of SDK in a super-project
 
 ## Bug Fixes

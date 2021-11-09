@@ -22,7 +22,7 @@ details. */
 # if !(defined (_POSIX_SOURCE) || defined (_WINSOCK_H) || defined (_WINSOCKAPI_) || defined (__USE_W32_SOCKETS))
 
 #include <sys/cdefs.h>
-
+#include <sys/syslimits.h>
 #include <sys/_sigset.h>
 #include <sys/_timeval.h>
 #include <sys/timespec.h>
@@ -40,7 +40,7 @@ typedef	__sigset_t	sigset_t;
  * should be >= NOFILE (param.h).
  */
 #  ifndef	FD_SETSIZE
-#	define	FD_SETSIZE	64
+#	define	FD_SETSIZE	(OPEN_MAX+16)
 #  endif
 
 typedef	unsigned long	fd_mask;
