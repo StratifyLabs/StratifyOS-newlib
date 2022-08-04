@@ -2,7 +2,7 @@ project(newlib CXX C)
 
 
 # The include files need to be synced with the ones in the system include folder
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include DESTINATION ${SOS_SDK_PATH}/arm-none-eabi)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include DESTINATION ${CMSDK_LOCAL_PATH}/arm-none-eabi)
 
 set(PUBLIC_DEFINITIONS
 	-D__StratifyOS__
@@ -38,20 +38,20 @@ set(BUILD_FLAGS
 	)
 
 #Add sources to the project
-sos_sdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
-sos_sdk_add_subdirectory(LIBM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libm)
+cmsdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
+cmsdk_add_subdirectory(LIBM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libm)
 
 set(LIBC_NAME newlib_libc)
 set(LIBM_NAME newlib_libm)
 set(LIBA_NAME newlib_liba)
 
-sos_sdk_library_target(LIBC_RELEASE ${LIBC_NAME} "" release ${SOS_ARCH})
-sos_sdk_library_target(LIBM_RELEASE ${LIBM_NAME} "" release ${SOS_ARCH})
+cmsdk_library_target(LIBC_RELEASE ${LIBC_NAME} "" release ${CMSDK_ARCH})
+cmsdk_library_target(LIBM_RELEASE ${LIBM_NAME} "" release ${CMSDK_ARCH})
 
-sos_sdk_library_target(LIBA_VSPRINTF_RELEASE ${LIBA_NAME} "vsprintf" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VPRINTF_RELEASE ${LIBA_NAME} "vprintf" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VSIPRINTF_RELEASE ${LIBA_NAME} "vsiprintf" release ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VIPRINTF_RELEASE ${LIBA_NAME} "viprintf" release ${SOS_ARCH})
+cmsdk_library_target(LIBA_VSPRINTF_RELEASE ${LIBA_NAME} "vsprintf" release ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VPRINTF_RELEASE ${LIBA_NAME} "vprintf" release ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VSIPRINTF_RELEASE ${LIBA_NAME} "vsiprintf" release ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VIPRINTF_RELEASE ${LIBA_NAME} "viprintf" release ${CMSDK_ARCH})
 
 add_library(${LIBA_VSPRINTF_RELEASE_TARGET} STATIC)
 add_library(${LIBA_VPRINTF_RELEASE_TARGET} STATIC)
@@ -185,14 +185,14 @@ target_compile_options(${LIBM_RELEASE_TARGET}
 	-Os
 	)
 
-sos_sdk_library_target(LIBA_VSPRINTF_DEBUG ${LIBA_NAME} "vsprintf" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VPRINTF_DEBUG ${LIBA_NAME} "vprintf" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VSIPRINTF_DEBUG ${LIBA_NAME} "vsiprintf" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBA_VIPRINTF_DEBUG ${LIBA_NAME} "viprintf" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBA_DEBUG ${LIBA_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
+cmsdk_library_target(LIBA_VSPRINTF_DEBUG ${LIBA_NAME} "vsprintf" debug ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VPRINTF_DEBUG ${LIBA_NAME} "vprintf" debug ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VSIPRINTF_DEBUG ${LIBA_NAME} "vsiprintf" debug ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_VIPRINTF_DEBUG ${LIBA_NAME} "viprintf" debug ${CMSDK_ARCH})
+cmsdk_library_target(LIBA_DEBUG ${LIBA_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
 
-sos_sdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
-sos_sdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${SOS_ARCH})
+cmsdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
+cmsdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
 
 add_library(${LIBA_VSPRINTF_DEBUG_TARGET} STATIC)
 add_library(${LIBA_VPRINTF_DEBUG_TARGET} STATIC)
@@ -202,18 +202,18 @@ add_library(${LIBA_VIPRINTF_DEBUG_TARGET} STATIC)
 add_library(${LIBC_DEBUG_TARGET} STATIC)
 add_library(${LIBM_DEBUG_TARGET} STATIC)
 
-sos_sdk_copy_target(${LIBA_VSPRINTF_RELEASE_TARGET} ${LIBA_VSPRINTF_DEBUG_TARGET})
-sos_sdk_copy_target(${LIBA_VPRINTF_RELEASE_TARGET} ${LIBA_VPRINTF_DEBUG_TARGET})
-sos_sdk_copy_target(${LIBA_VSIPRINTF_RELEASE_TARGET} ${LIBA_VSIPRINTF_DEBUG_TARGET})
-sos_sdk_copy_target(${LIBA_VIPRINTF_RELEASE_TARGET} ${LIBA_VIPRINTF_DEBUG_TARGET})
+cmsdk_copy_target(${LIBA_VSPRINTF_RELEASE_TARGET} ${LIBA_VSPRINTF_DEBUG_TARGET})
+cmsdk_copy_target(${LIBA_VPRINTF_RELEASE_TARGET} ${LIBA_VPRINTF_DEBUG_TARGET})
+cmsdk_copy_target(${LIBA_VSIPRINTF_RELEASE_TARGET} ${LIBA_VSIPRINTF_DEBUG_TARGET})
+cmsdk_copy_target(${LIBA_VIPRINTF_RELEASE_TARGET} ${LIBA_VIPRINTF_DEBUG_TARGET})
 
-sos_sdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
-sos_sdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
+cmsdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
+cmsdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
 
-sos_sdk_library_add_arch_targets("${LIBA_VSPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_VPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_VSIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
-sos_sdk_library_add_arch_targets("${LIBA_VIPRINTF_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBA_VSPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBA_VPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBA_VSIPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBA_VIPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
 
 set(DEPENDENCIES
 	${LIBA_NAME}_vsprintf
@@ -223,16 +223,16 @@ set(DEPENDENCIES
 
 set(LIBA_DEPENDENCIES "")
 
-sos_sdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${SOS_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${CMSDK_ARCH} "${DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
 
-sos_sdk_library_add_arch_targets("${LIBA_VSPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "${LIBA_DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBA_VPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "${LIBA_DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBA_VSIPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "${LIBA_DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBA_VIPRINTF_DEBUG_OPTIONS}" ${SOS_ARCH} "${LIBA_DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBA_VSPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBA_VPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBA_VSIPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBA_VIPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
 
-sos_sdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${SOS_ARCH} "${DEPENDENCIES}")
-sos_sdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${SOS_ARCH} "")
+cmsdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${DEPENDENCIES}")
+cmsdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${CMSDK_ARCH} "")
 
 install(DIRECTORY
 	src/libc/include/

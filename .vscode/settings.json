@@ -5,6 +5,6 @@
   },
   "cmake.buildDirectory": "${workspaceFolder}/cmake_arm",
   "cmake.configureArgs": [
-    "-DSOS_ARCH_LIST=''"
+    "-DCMSDK_ARCH_LIST=''"
   ]
 }
