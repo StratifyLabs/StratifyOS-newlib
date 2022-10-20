@@ -221,7 +221,7 @@ set(DEPENDENCIES
 	${LIBA_NAME}_vsiprintf
 	${LIBA_NAME}_viprintf)
 
-set(LIBA_DEPENDENCIES "")
+set(LIBA_DEPENDENCIES "StratifyOS_interface")
 
 cmsdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${CMSDK_ARCH} "${DEPENDENCIES}")
 cmsdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
