@@ -37,29 +37,29 @@ set(BUILD_FLAGS
 	-Wno-overflow
 	)
 
-#Add sources to the project
-cmsdk_add_subdirectory(LIBC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libc)
-cmsdk_add_subdirectory(LIBM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libm)
-
 set(LIBC_NAME newlib_libc)
 set(LIBM_NAME newlib_libm)
 set(LIBA_NAME newlib_liba)
 
-cmsdk_library_target(LIBC_RELEASE ${LIBC_NAME} "" release ${CMSDK_ARCH})
-cmsdk_library_target(LIBM_RELEASE ${LIBM_NAME} "" release ${CMSDK_ARCH})
+cmsdk2_add_library(
+	NAME ${LIBC_NAME}
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBC_RELEASE_TARGET)
 
-cmsdk_library_target(LIBA_VSPRINTF_RELEASE ${LIBA_NAME} "vsprintf" release ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VPRINTF_RELEASE ${LIBA_NAME} "vprintf" release ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VSIPRINTF_RELEASE ${LIBA_NAME} "vsiprintf" release ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VIPRINTF_RELEASE ${LIBA_NAME} "viprintf" release ${CMSDK_ARCH})
+cmsdk2_add_library(
+	NAME ${LIBM_NAME}
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBM_RELEASE_TARGET)
 
-add_library(${LIBA_VSPRINTF_RELEASE_TARGET} STATIC)
-add_library(${LIBA_VPRINTF_RELEASE_TARGET} STATIC)
-add_library(${LIBA_VSIPRINTF_RELEASE_TARGET} STATIC)
-add_library(${LIBA_VIPRINTF_RELEASE_TARGET} STATIC)
+cmsdk2_add_sources(
+	TARGET ${LIBC_RELEASE_TARGET}
+	DIRECTORY src/libc)
 
-add_library(${LIBC_RELEASE_TARGET} STATIC)
-add_library(${LIBM_RELEASE_TARGET} STATIC)
+cmsdk2_add_sources(
+	TARGET ${LIBM_RELEASE_TARGET}
+	DIRECTORY src/libm)
 
 target_sources(${LIBC_RELEASE_TARGET}
 	PUBLIC
@@ -73,6 +73,38 @@ target_sources(${LIBM_RELEASE_TARGET}
 	${LIBM_SOURCES}
 	)
 
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	TYPE OBJECT
+	OPTION vsprintf
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VSPRINTF_RELEASE_TARGET)
+
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	TYPE OBJECT
+	OPTION vprintf
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VPRINTF_RELEASE_TARGET)
+
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	TYPE OBJECT
+	OPTION vsiprintf
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VSIPRINTF_RELEASE_TARGET)
+
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	TYPE OBJECT
+	OPTION viprintf
+	CONFIG release
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VIPRINTF_RELEASE_TARGET)
+
 set(LIBA_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfprintf.c
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/stdio/vfscanf.c
@@ -82,38 +114,32 @@ set(LIBA_SOURCES
 
 target_sources(${LIBA_VSPRINTF_RELEASE_TARGET}
 	PRIVATE
-	${LIBA_SOURCES}
-)
+	${LIBA_SOURCES})
 
 target_sources(${LIBA_VPRINTF_RELEASE_TARGET}
 	PRIVATE
-	${LIBA_SOURCES}
-)
+	${LIBA_SOURCES})
 
 target_sources(${LIBA_VSIPRINTF_RELEASE_TARGET}
 	PRIVATE
-	${LIBA_SOURCES}
-)
+	${LIBA_SOURCES})
 
 target_sources(${LIBA_VIPRINTF_RELEASE_TARGET}
 	PRIVATE
-	${LIBA_SOURCES}
-)
+	${LIBA_SOURCES})
 
 target_compile_definitions(${LIBA_VSPRINTF_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
 	${PRIVATE_DEFINITIONS}
-	-DSTRING_ONLY
-	)
+	-DSTRING_ONLY)
 
 target_compile_definitions(${LIBA_VPRINTF_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
-	${PRIVATE_DEFINITIONS}
-	)
+	${PRIVATE_DEFINITIONS})
 
 target_compile_definitions(${LIBA_VSIPRINTF_RELEASE_TARGET}
 	PUBLIC
@@ -121,23 +147,20 @@ target_compile_definitions(${LIBA_VSIPRINTF_RELEASE_TARGET}
 	PRIVATE
 	${PRIVATE_DEFINITIONS}
 	-DSTRING_ONLY
-	-DINTEGER_ONLY
-	)
+	-DINTEGER_ONLY)
 
 target_compile_definitions(${LIBA_VIPRINTF_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
 	${PRIVATE_DEFINITIONS}
-	-DINTEGER_ONLY
-	)
+	-DINTEGER_ONLY)
 
 target_compile_definitions(${LIBC_RELEASE_TARGET}
 	PUBLIC
 	${PUBLIC_DEFINITIONS}
 	PRIVATE
-	${PRIVATE_DEFINITIONS}
-	)
+	${PRIVATE_DEFINITIONS})
 
 target_compile_definitions(${LIBM_RELEASE_TARGET}
 	PUBLIC
@@ -149,21 +172,18 @@ target_compile_definitions(${LIBM_RELEASE_TARGET}
 target_compile_options(${LIBC_RELEASE_TARGET}
 	PUBLIC
 	PRIVATE
-	${BUILD_FLAGS}
-	)
+	${BUILD_FLAGS})
 
 target_compile_options(${LIBM_RELEASE_TARGET}
 	PUBLIC
 	PRIVATE
-	${BUILD_FLAGS}
-	)
+	${BUILD_FLAGS})
 
 target_include_directories(${LIBC_RELEASE_TARGET}
 	PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libc/include>
 	PRIVATE
-	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/machine/arm
-	)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/machine/arm)
 
 target_include_directories(${LIBM_RELEASE_TARGET}
 	PUBLIC
@@ -171,49 +191,60 @@ target_include_directories(${LIBM_RELEASE_TARGET}
 	PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libc/machine/arm
 	${CMAKE_CURRENT_SOURCE_DIR}/src/libm/math
-	${CMAKE_CURRENT_SOURCE_DIR}/src/libm/common
-
-	)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libm/common)
 
 target_compile_options(${LIBC_RELEASE_TARGET}
 	PRIVATE
-	-Os
-	)
+	-Os)
 
 target_compile_options(${LIBM_RELEASE_TARGET}
 	PRIVATE
-	-Os
-	)
+	-Os)
 
-cmsdk_library_target(LIBA_VSPRINTF_DEBUG ${LIBA_NAME} "vsprintf" debug ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VPRINTF_DEBUG ${LIBA_NAME} "vprintf" debug ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VSIPRINTF_DEBUG ${LIBA_NAME} "vsiprintf" debug ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_VIPRINTF_DEBUG ${LIBA_NAME} "viprintf" debug ${CMSDK_ARCH})
-cmsdk_library_target(LIBA_DEBUG ${LIBA_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	OPTION vsprintf
+	TYPE OBJECT
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VSPRINTF_DEBUG_TARGET)
 
-cmsdk_library_target(LIBC_DEBUG ${LIBC_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
-cmsdk_library_target(LIBM_DEBUG ${LIBM_NAME} "${LIB_OPTION}" debug ${CMSDK_ARCH})
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	OPTION vprintf
+	TYPE OBJECT
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VPRINTF_DEBUG_TARGET)
 
-add_library(${LIBA_VSPRINTF_DEBUG_TARGET} STATIC)
-add_library(${LIBA_VPRINTF_DEBUG_TARGET} STATIC)
-add_library(${LIBA_VSIPRINTF_DEBUG_TARGET} STATIC)
-add_library(${LIBA_VIPRINTF_DEBUG_TARGET} STATIC)
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	OPTION vsiprintf
+	TYPE OBJECT
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VSIPRINTF_DEBUG_TARGET)
 
-add_library(${LIBC_DEBUG_TARGET} STATIC)
-add_library(${LIBM_DEBUG_TARGET} STATIC)
+cmsdk2_add_library(
+	NAME ${LIBA_NAME}
+	OPTION viprintf
+	TYPE OBJECT
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBA_VIPRINTF_DEBUG_TARGET)
 
-cmsdk_copy_target(${LIBA_VSPRINTF_RELEASE_TARGET} ${LIBA_VSPRINTF_DEBUG_TARGET})
-cmsdk_copy_target(${LIBA_VPRINTF_RELEASE_TARGET} ${LIBA_VPRINTF_DEBUG_TARGET})
-cmsdk_copy_target(${LIBA_VSIPRINTF_RELEASE_TARGET} ${LIBA_VSIPRINTF_DEBUG_TARGET})
-cmsdk_copy_target(${LIBA_VIPRINTF_RELEASE_TARGET} ${LIBA_VIPRINTF_DEBUG_TARGET})
-
-cmsdk_copy_target(${LIBC_RELEASE_TARGET} ${LIBC_DEBUG_TARGET})
-cmsdk_copy_target(${LIBM_RELEASE_TARGET} ${LIBM_DEBUG_TARGET})
-
-cmsdk_library_add_arch_targets("${LIBA_VSPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
-cmsdk_library_add_arch_targets("${LIBA_VPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
-cmsdk_library_add_arch_targets("${LIBA_VSIPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
-cmsdk_library_add_arch_targets("${LIBA_VIPRINTF_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk2_copy_target(
+	SOURCE ${LIBA_VSPRINTF_RELEASE_TARGET}
+	DESTINATION ${LIBA_VSPRINTF_DEBUG_TARGET})
+cmsdk2_copy_target(
+	SOURCE ${LIBA_VPRINTF_RELEASE_TARGET}
+	DESTINATION ${LIBA_VPRINTF_DEBUG_TARGET})
+cmsdk2_copy_target(
+	SOURCE ${LIBA_VSIPRINTF_RELEASE_TARGET}
+	DESTINATION ${LIBA_VSIPRINTF_DEBUG_TARGET})
+cmsdk2_copy_target(
+	SOURCE ${LIBA_VIPRINTF_RELEASE_TARGET}
+	DESTINATION ${LIBA_VIPRINTF_DEBUG_TARGET})
 
 set(DEPENDENCIES
 	${LIBA_NAME}_vsprintf
@@ -221,24 +252,68 @@ set(DEPENDENCIES
 	${LIBA_NAME}_vsiprintf
 	${LIBA_NAME}_viprintf)
 
-set(LIBA_DEPENDENCIES "StratifyOS_interface")
+set(LIBA_DEPENDENCIES StratifyOS_interface)
 
-cmsdk_library_add_arch_targets("${LIBC_RELEASE_OPTIONS}" ${CMSDK_ARCH} "${DEPENDENCIES}")
-cmsdk_library_add_arch_targets("${LIBM_RELEASE_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VSPRINTF_RELEASE_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VSIPRINTF_RELEASE_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VPRINTF_RELEASE_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VIPRINTF_RELEASE_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VSPRINTF_DEBUG_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VSIPRINTF_DEBUG_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VPRINTF_DEBUG_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBA_VIPRINTF_DEBUG_TARGET}
+	DEPENDENCIES ${LIBA_DEPENDENCIES})
 
-cmsdk_library_add_arch_targets("${LIBA_VSPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
-cmsdk_library_add_arch_targets("${LIBA_VPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
-cmsdk_library_add_arch_targets("${LIBA_VSIPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
-cmsdk_library_add_arch_targets("${LIBA_VIPRINTF_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBA_DEPENDENCIES}")
+cmsdk2_add_library(
+	NAME ${LIBC_NAME}
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBC_DEBUG_TARGET)
 
-cmsdk_library_add_arch_targets("${LIBC_DEBUG_OPTIONS}" ${CMSDK_ARCH} "${DEPENDENCIES}")
-cmsdk_library_add_arch_targets("${LIBM_DEBUG_OPTIONS}" ${CMSDK_ARCH} "")
+cmsdk2_add_library(
+	NAME ${LIBM_NAME}
+	CONFIG debug
+	ARCH ${CMSDK_ARCH}
+	TARGET LIBM_DEBUG_TARGET)
+
+cmsdk2_copy_target(
+	SOURCE ${LIBC_RELEASE_TARGET}
+	DESTINATION ${LIBC_DEBUG_TARGET})
+cmsdk2_copy_target(
+	SOURCE ${LIBM_RELEASE_TARGET}
+	DESTINATION ${LIBM_DEBUG_TARGET})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBC_RELEASE_TARGET}
+	DEPENDENCIES ${DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBM_RELEASE_TARGET}
+	DEPENDENCIES StratifyOS_interface)
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBC_DEBUG_TARGET}
+	DEPENDENCIES ${DEPENDENCIES})
+cmsdk2_library_add_dependencies(
+	TARGET ${LIBM_DEBUG_TARGET}
+	DEPENDENCIES StratifyOS_interface)
 
 install(DIRECTORY
 	src/libc/include/
 	DESTINATION include
 	PATTERN CMakelists.txt EXCLUDE)
-
 
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/newlib.cmake

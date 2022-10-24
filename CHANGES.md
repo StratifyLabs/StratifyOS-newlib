@@ -1,3 +1,9 @@
+# Version 1.2.0
+
+## New Features
+
+- Use `cmsdk2` for building
+
 # Version 1.1.0
 
 ## New Features
