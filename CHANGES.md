@@ -1,3 +1,9 @@
+# Version 1.2.1
+
+## Bug Fixes
+
+- Update version in CMake
+
 # Version 1.2.0
 
 ## New Features
