@@ -318,6 +318,6 @@ install(DIRECTORY
 install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/newlib.cmake
 	DESTINATION
-	${SOS_SDK_PATH}/cmake/targets)
+	${CMSDK_LOCAL_PATH}/cmake/targets)
 
 
