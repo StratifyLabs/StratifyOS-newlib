@@ -1,3 +1,9 @@
+# Version 1.2.2 (unreleased)
+
+## Bug Fixes
+
+- Fix `SOS_SDK_PATH` path reference for install target
+
 # Version 1.2.1
 
 ## Bug Fixes
